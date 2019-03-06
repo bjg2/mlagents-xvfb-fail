@@ -1,9 +1,16 @@
 import os
 import stat
 import random
+from argparse import ArgumentParser
 
 import portpicker
 from mlagents_envs import UnityEnvironment
+
+# Args
+args = ArgumentParser()
+args.add_argument('--docker_training', default=False, action='store_true',
+                  help='Whether to run training with xvfb.')
+flags = args.parse_args()
 
 # Binary we want to work with
 binary_path = os.path.abspath('gridworld/gridworld.x86_64')
@@ -16,6 +23,7 @@ os.chmod(binary_path, st.st_mode | stat.S_IEXEC)
 env = UnityEnvironment(file_name=binary_path,
                        worker_id=0,
                        base_port=portpicker.pick_unused_port(),
+                       docker_training=flags.docker_training,
                        )
 brain_name = env.brain_names[0]
 
