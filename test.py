@@ -1,5 +1,6 @@
 import os
 import stat
+import random
 
 import portpicker
 from mlagents_envs import UnityEnvironment
@@ -18,7 +19,19 @@ env = UnityEnvironment(file_name=binary_path,
                        )
 brain_name = env.brain_names[0]
 
-env_info = env.reset(train_mode=True)
-obs = env_info.visual_observations[0]
+# Do initial reset
+env_info = env.reset(train_mode=True)[brain_name]
+obs = env_info.visual_observations[0][0]
 
-print(obs)
+# Forever
+while True:
+    # Step environment with random action
+    env_info = env.step([random.randint(1, 4)])[brain_name]
+    obs = env_info.visual_observations[0][0]
+    reward = env_info.rewards[0]
+    done = env_info.local_done[0]
+
+    if done:
+        # Reset if the episode is done
+        env_info = env.reset(train_mode=True)[brain_name]
+        obs = env_info.visual_observations[0][0]
