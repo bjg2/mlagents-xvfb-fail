@@ -1,0 +1,5 @@
+venv
+.vscode
+UnitySDK.log
+requirements.txt
+README.md
