@@ -12,37 +12,22 @@ Repro of failing to get mlagents work with xvfb in docker
 
 - Ubuntu 18.04.2 LTS
 - Nvidia drivers 415.27
-- CUDA 10.0
 - Docker 18.09.3
-- nvidia-docker 2.0.3
 
-## Out of docker working repro
+## Docker fails (ubuntu 18.04)
 
 From repo root run:
 
 ```bash
-virtualenv -p python3 venv
-source venv/bin/activate
-pip install -r requirements.txt
-python test.py
+docker build -f fails.dockerfile -t xvfb-fails .
+docker run xvfb-fails
 ```
 
-## Out of docker issue with xvfb repro
+## Docker works (ubuntu 16.04)
 
 From repo root run:
 
 ```bash
-virtualenv -p python3 venv
-source venv/bin/activate
-pip install -r requirements.txt
-python test.py --docker_training
-```
-
-## Docker issue with xvfb repro
-
-From repo root run:
-
-```bash
-docker build -f .dockerfile -t mlagents-xvfb-fail .
-nvidia-docker run mlagents-xvfb-fail
+docker build -f works.dockerfile -t xvfb-works .
+docker run xvfb-works
 ```
